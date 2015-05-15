@@ -46,12 +46,12 @@ public class MainActivity extends AppCompatActivity implements MangaListLoadedLi
         mRecyclerManga.setLayoutManager(new LinearLayoutManager(this));
         mRecyclerManga.setAdapter(mAdapter);
 
-        if (savedInstanceState != null) {
-            mListManga = savedInstanceState.getParcelableArrayList(STATE_MANGA);
-        } else {
+//        if (savedInstanceState != null) {
+//            mListManga = savedInstanceState.getParcelableArrayList(STATE_MANGA);
+//        } else {
             new TaskLoadMangaList(this).execute();
-        }
-        mAdapter.setManga(mListManga);
+//        }
+        Logger.toastShort(this, "HEre");
    }
 
     @Override

@@ -15,12 +15,12 @@ import java.util.ArrayList;
  */
 public class TaskLoadMangaList extends AsyncTask<Void, Void, ArrayList<Manga>> {
 
-    private MangaListLoadedListener mComponent;
+    private MangaListLoadedListener mContext;
     private VolleySingleton mVolleySingleton;
     private RequestQueue requestQueue;
 
-    public TaskLoadMangaList(MangaListLoadedListener mComponent) {
-        this.mComponent = mComponent;
+    public TaskLoadMangaList(MangaListLoadedListener mContext) {
+        this.mContext = mContext;
         mVolleySingleton = VolleySingleton.getsInstance();
         requestQueue = mVolleySingleton.getRequestQueue();
     }
@@ -33,6 +33,7 @@ public class TaskLoadMangaList extends AsyncTask<Void, Void, ArrayList<Manga>> {
 
     @Override
     protected void onPostExecute(ArrayList<Manga> mangas) {
-        super.onPostExecute(mangas);
+        if (mContext != null)
+            mContext.onMangaListLoaded(mangas);
     }
 }
