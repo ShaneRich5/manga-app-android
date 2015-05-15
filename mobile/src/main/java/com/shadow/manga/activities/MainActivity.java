@@ -79,5 +79,7 @@ public class MainActivity extends AppCompatActivity implements MangaListLoadedLi
     @Override
     public void onMangaListLoaded(ArrayList<Manga> listManga) {
         mAdapter.setManga(listManga);
+
+        Logger.toastShort(this, "loaded");
     }
 }

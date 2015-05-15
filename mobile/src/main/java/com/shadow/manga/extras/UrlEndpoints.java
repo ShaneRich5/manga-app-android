@@ -5,6 +5,7 @@ package com.shadow.manga.extras;
  */
 public class UrlEndpoints {
     public static final String URL_BASE = "https://www.mangaeden.com/api/";
+    public static final String URL_CDN_BASE = "http://cdn.mangaeden.com/mangasimg/200x/";
 
     public class QUERY {
         public static final String PAGE = "p=";

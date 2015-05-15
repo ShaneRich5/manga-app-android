@@ -8,11 +8,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.ImageLoader;
 import com.shadow.manga.R;
 import com.shadow.manga.extras.Constants;
+import com.shadow.manga.json.Endpoints;
 import com.shadow.manga.models.Manga;
 import com.shadow.manga.network.VolleySingleton;
 
@@ -85,7 +87,7 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolderMa
 
     private void loadImages(String urlThumbnail, final ViewHolderManga holder) {
         if (!urlThumbnail.equals(Constants.NA)){
-            mImageLoader.get(urlThumbnail, new ImageLoader.ImageListener() {
+            mImageLoader.get(Endpoints.getRequestMangaThumbnail(urlThumbnail), new ImageLoader.ImageListener() {
                 @Override
                 public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
                     holder.thumbnail.setImageBitmap(response.getBitmap());

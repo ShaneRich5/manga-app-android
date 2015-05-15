@@ -2,6 +2,7 @@ package com.shadow.manga.json;
 
 import com.shadow.manga.extras.Constants;
 import com.shadow.manga.extras.Util;
+import com.shadow.manga.logger.Logger;
 import com.shadow.manga.models.Manga;
 
 import org.json.JSONArray;
@@ -38,9 +39,9 @@ public class Parser {
 
                 for (int i = 0; i < mangaArray.length(); i++) {
                     // defaults
-                    long id = -1;
                     int followers = -1;
                     int status = -1;
+                    String id = Constants.NA;
                     String title = Constants.NA;
                     String latestUpdate = Constants.NA;
                     String urlThumbnail = Constants.NA;
@@ -50,7 +51,7 @@ public class Parser {
                     JSONObject currentManga = mangaArray.getJSONObject(i);
 
                     if (Utils.contains(currentManga, KEY_ID)) {
-                        id = currentManga.getLong(KEY_ID);
+                        id = currentManga.getString(KEY_ID);
                     }
 
                     if (Utils.contains(currentManga, KEY_ALIAS)) {
@@ -59,6 +60,9 @@ public class Parser {
 
                     if (Utils.contains(currentManga, KEY_THUMBNAIL)) {
                         urlThumbnail = currentManga.getString(KEY_THUMBNAIL);
+                        if (urlThumbnail == null)
+                            urlThumbnail = Constants.NA;
+                        Logger.m(urlThumbnail);
                     }
 
                     if (Utils.contains(currentManga, KEY_HITS)) {
@@ -104,7 +108,7 @@ public class Parser {
                     manga.setAlias(alias);
                     manga.setTitle(title);
 
-                    if ((id != -1) && (!title.equals(Constants.NA))) {
+                    if ((!id.equals(Constants.NA)) && (!title.equals(Constants.NA))) {
                         mangaList.add(manga);
                     }
                 }

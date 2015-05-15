@@ -13,7 +13,7 @@ import java.util.Date;
  */
 public class Manga implements Parcelable{
 
-    private long id;
+    private String id;
     private int score;
     private int status;
     private String title;
@@ -40,7 +40,7 @@ public class Manga implements Parcelable{
     public Manga() {
     }
 
-    public Manga(long id, String title, Date latestUpdate, int score, String urlThumbnail, int followers) {
+    public Manga(String id, String title, Date latestUpdate, int score, String urlThumbnail, int followers) {
         this.id = id;
         this.title = title;
         this.latestUpdate = latestUpdate;
@@ -50,7 +50,7 @@ public class Manga implements Parcelable{
     }
 
     public Manga(Parcel input) {
-        id = input.readLong();
+        id = input.readString();
         title = input.readString();
         long dateMillis = input.readLong();
         latestUpdate = (dateMillis == -1 ? null : new Date(dateMillis));
@@ -59,11 +59,11 @@ public class Manga implements Parcelable{
         followers = input.readInt();
     }
 
-    public long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -139,7 +139,7 @@ public class Manga implements Parcelable{
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
+        dest.writeString(id);
         dest.writeString(title);
         dest.writeLong(latestUpdate == null ? -1 : latestUpdate.getTime());
         dest.writeInt(score);

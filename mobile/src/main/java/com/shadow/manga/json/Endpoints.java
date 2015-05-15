@@ -9,6 +9,7 @@ import static com.shadow.manga.extras.UrlEndpoints.Params.LIST;
 import static com.shadow.manga.extras.UrlEndpoints.QUERY.LIMIT;
 import static com.shadow.manga.extras.UrlEndpoints.QUERY.PAGE;
 import static com.shadow.manga.extras.UrlEndpoints.URL_BASE;
+import static com.shadow.manga.extras.UrlEndpoints.URL_CDN_BASE;
 
 /**
  * Created by Shane on 5/14/2015.
@@ -29,5 +30,9 @@ public class Endpoints {
                 + PAGE + page
                 + AMPERSAND
                 + LIMIT + 30;
+    }
+
+    public static String getRequestMangaThumbnail(String urlThumbnail) {
+        return URL_CDN_BASE + urlThumbnail;
     }
 }

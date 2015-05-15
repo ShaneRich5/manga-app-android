@@ -3,8 +3,10 @@ package com.shadow.manga.tasks;
 import android.os.AsyncTask;
 
 import com.android.volley.RequestQueue;
+import com.shadow.manga.application.MyApplication;
 import com.shadow.manga.callbacks.MangaListLoadedListener;
 import com.shadow.manga.extras.MangaUtils;
+import com.shadow.manga.logger.Logger;
 import com.shadow.manga.models.Manga;
 import com.shadow.manga.network.VolleySingleton;
 
@@ -15,12 +17,12 @@ import java.util.ArrayList;
  */
 public class TaskLoadMangaList extends AsyncTask<Void, Void, ArrayList<Manga>> {
 
-    private MangaListLoadedListener mContext;
+    private MangaListLoadedListener mComponent;
     private VolleySingleton mVolleySingleton;
     private RequestQueue requestQueue;
 
-    public TaskLoadMangaList(MangaListLoadedListener mContext) {
-        this.mContext = mContext;
+    public TaskLoadMangaList(MangaListLoadedListener mComponent) {
+        this.mComponent = mComponent;
         mVolleySingleton = VolleySingleton.getsInstance();
         requestQueue = mVolleySingleton.getRequestQueue();
     }
@@ -33,7 +35,10 @@ public class TaskLoadMangaList extends AsyncTask<Void, Void, ArrayList<Manga>> {
 
     @Override
     protected void onPostExecute(ArrayList<Manga> mangas) {
-        if (mContext != null)
-            mContext.onMangaListLoaded(mangas);
+        if (mComponent != null)
+            mComponent.onMangaListLoaded(mangas);
+
+
+        Logger.toastShort(MyApplication.getAppContext(), "onPostExecute");
     }
 }
