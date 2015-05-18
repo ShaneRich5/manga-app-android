@@ -47,6 +47,11 @@ public class MangaAdapter extends RecyclerView.Adapter<MangaAdapter.ViewHolderMa
         notifyDataSetChanged();
     }
 
+    public void addMange(ArrayList<Manga> newMangas) {
+        this.mListManga.addAll(newMangas);
+        notifyDataSetChanged();
+    }
+
     @Override
     public ViewHolderManga onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = mInflater.inflate(R.layout.row_manga, parent, false);

@@ -16,14 +16,6 @@ import static com.shadow.manga.extras.UrlEndpoints.URL_CDN_BASE;
  */
 public class Endpoints {
 
-    public static String getRequestMangaList(int page, int limit){
-        return URL_BASE + LIST + ENGLISH
-                + QUESTION
-                + PAGE + page
-                + AMPERSAND
-                + LIMIT + limit;
-    }
-
     public static String getRequestMangaList(int page){
         return URL_BASE + LIST + ENGLISH
                 + QUESTION

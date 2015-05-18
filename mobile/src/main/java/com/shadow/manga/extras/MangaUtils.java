@@ -15,9 +15,8 @@ import java.util.ArrayList;
  */
 public class MangaUtils {
 
-    public static ArrayList<Manga> loadMangaList(RequestQueue requestQueue) {
-        JSONObject response = Requestor.requestMangaJSON(requestQueue, Endpoints.getRequestMangaList(0));
-        ArrayList<Manga> listManga = Parser.parseMangasJSON(response);
-        return listManga;
+    public static ArrayList<Manga> loadMangaList(RequestQueue requestQueue, int page) {
+        JSONObject response = Requestor.requestMangaJSON(requestQueue, Endpoints.getRequestMangaList(page));
+        return Parser.parseMangasJSON(response);
     }
 }

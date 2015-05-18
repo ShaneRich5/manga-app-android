@@ -20,17 +20,25 @@ public class TaskLoadMangaList extends AsyncTask<Void, Void, ArrayList<Manga>> {
     private MangaListLoadedListener mComponent;
     private VolleySingleton mVolleySingleton;
     private RequestQueue requestQueue;
+    private int page;
 
     public TaskLoadMangaList(MangaListLoadedListener mComponent) {
         this.mComponent = mComponent;
         mVolleySingleton = VolleySingleton.getsInstance();
         requestQueue = mVolleySingleton.getRequestQueue();
+        page = 0;
+    }
+
+    public TaskLoadMangaList(MangaListLoadedListener mComponent, int page) {
+        this.mComponent = mComponent;
+        mVolleySingleton = VolleySingleton.getsInstance();
+        requestQueue = mVolleySingleton.getRequestQueue();
+        this.page = page;
     }
 
     @Override
     protected ArrayList<Manga> doInBackground(Void... params) {
-        ArrayList<Manga> listManga = MangaUtils.loadMangaList(requestQueue);
-        return listManga;
+        return MangaUtils.loadMangaList(requestQueue, page);
     }
 
     @Override
