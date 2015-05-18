@@ -1,17 +1,19 @@
 package com.shadow.manga.models;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.shadow.manga.logger.Logger;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
 /**
  * Created by Shane on 5/14/2015.
  */
-public class Manga implements Parcelable{
+public class Manga implements Parcelable {
 
     private String id;
     private int score;
@@ -21,6 +23,8 @@ public class Manga implements Parcelable{
     private Date latestUpdate;
     private String urlThumbnail;
     private ArrayList<String> categories;
+
+    private Bitmap thumbnail;
 
     public static final Parcelable.Creator<Manga> CREATOR = new Parcelable.Creator<Manga>() {
 
@@ -49,14 +53,14 @@ public class Manga implements Parcelable{
         this.followers = followers;
     }
 
-    public Manga(Parcel input) {
-        id = input.readString();
-        title = input.readString();
-        long dateMillis = input.readLong();
-        latestUpdate = (dateMillis == -1 ? null : new Date(dateMillis));
-        score = input.readInt();
-        urlThumbnail = input.readString();
-        followers = input.readInt();
+
+
+    public Bitmap getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(Bitmap thumbnail) {
+        this.thumbnail = thumbnail;
     }
 
     public String getId() {
@@ -131,6 +135,16 @@ public class Manga implements Parcelable{
         return alias;
     }
 
+    public Manga(Parcel input) {
+        id = input.readString();
+        title = input.readString();
+        long dateMillis = input.readLong();
+        latestUpdate = (dateMillis == -1 ? null : new Date(dateMillis));
+        score = input.readInt();
+        urlThumbnail = input.readString();
+        followers = input.readInt();
+    }
+
     @Override
     public int describeContents() {
         Logger.m("describe Contents Manga");
@@ -144,5 +158,6 @@ public class Manga implements Parcelable{
         dest.writeLong(latestUpdate == null ? -1 : latestUpdate.getTime());
         dest.writeInt(score);
         dest.writeString(urlThumbnail);
+        dest.writeInt(followers);
     }
 }

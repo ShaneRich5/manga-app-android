@@ -1,27 +1,34 @@
 package com.shadow.manga.activities;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.GestureDetector;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
+import android.widget.ImageView;
 
 import com.shadow.manga.R;
 import com.shadow.manga.adapters.MangaAdapter;
 import com.shadow.manga.callbacks.MangaListLoadedListener;
+import com.shadow.manga.extras.Util;
 import com.shadow.manga.listeners.RecyclerEndlessOnScollListener;
 import com.shadow.manga.listeners.RecyclerItemClickListener;
-import com.shadow.manga.logger.Logger;
 import com.shadow.manga.models.Manga;
 import com.shadow.manga.tasks.TaskLoadMangaList;
 import com.shadow.manga.views.DividerItemDecoration;
 
 import java.util.ArrayList;
+
+import fr.castorflex.android.smoothprogressbar.SmoothProgressBar;
 
 public class MainActivity extends AppCompatActivity implements MangaListLoadedListener {
 
@@ -30,13 +37,19 @@ public class MainActivity extends AppCompatActivity implements MangaListLoadedLi
     private ArrayList<Manga> mListManga = new ArrayList<>();
     private RecyclerView mRecyclerManga;
     private MangaAdapter mAdapter;
+    private Toolbar mToolbar;
+    private SmoothProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setupToolbar();
+        setupProgressBar();
+
         mAdapter = new MangaAdapter(this);
+
         if (savedInstanceState != null) {
             mListManga = savedInstanceState.getParcelableArrayList(STATE_MANGA);
         } else {
@@ -47,6 +60,16 @@ public class MainActivity extends AppCompatActivity implements MangaListLoadedLi
 
         setUpRecyclerView();
    }
+
+    private void setupProgressBar() {
+        mProgressBar = (SmoothProgressBar) findViewById(R.id.progress_bar);
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void setupToolbar() {
+        mToolbar = (Toolbar) findViewById(R.id.app_bar);
+        setSupportActionBar(mToolbar);
+    }
 
     private void setUpRecyclerView(){
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -60,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements MangaListLoadedLi
                     @Override
                     public void onItemClick(View view, int position) {
                         Manga manga = mListManga.get(position);
-                        Logger.toastShort(MainActivity.this, manga.getAlias() + " " + manga.getId());
+                        openDetailsActivity(manga, view);
                     }
 
                     @Override
@@ -72,11 +95,32 @@ public class MainActivity extends AppCompatActivity implements MangaListLoadedLi
         mRecyclerManga.setOnScrollListener(new RecyclerEndlessOnScollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int currentPage) {
-                Logger.toastShort(MainActivity.this, "at the end");
-                new TaskLoadMangaList(MainActivity.this, currentPage);
-                Logger.toastShort(MainActivity.this, "" + currentPage);
+                loadFromApi(currentPage);
             }
         });
+    }
+
+    private void loadFromApi(int currentPage) {
+        mProgressBar.setVisibility(View.VISIBLE);
+        new TaskLoadMangaList(MainActivity.this, currentPage).execute();
+    }
+
+    @SuppressLint("NewApi")
+    private void openDetailsActivity(Manga manga, View view) {
+        Intent intent = new Intent(MainActivity.this, DetailsActivity.class);
+
+        ImageView thumbnail = (ImageView) view.findViewById(R.id.mangaThumbnail);
+        Bitmap bitmap = thumbnail.getDrawingCache();
+
+        intent.putExtra(DetailsActivity.EXTRA_MANGA, manga);
+        intent.putExtra(DetailsActivity.EXTRA_BITMAP, bitmap);
+
+        if (Util.isLollipopOrGreater()){
+            ActivityOptionsCompat options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(this, thumbnail, "thumbnail");
+            startActivity(intent, options.toBundle());
+        } else
+            startActivity(intent);
     }
 
     @Override
@@ -117,5 +161,6 @@ public class MainActivity extends AppCompatActivity implements MangaListLoadedLi
             mListManga.addAll(listManga);
             mAdapter.notifyDataSetChanged();
         }
+        mProgressBar.setVisibility(View.GONE);
     }
 }
